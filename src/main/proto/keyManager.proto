@@ -3,18 +3,35 @@ syntax = "proto3";
 option java_multiple_files = true;
 option java_package = "br.com.zup.academy";
 option java_outer_classname = "KeyManager";
-option objc_class_prefix = "HLW";
 
 package br.com.zup.academy;
 
 service KeyManagerService {
-  rpc send (KeyManagerRequest) returns (KeyManagerReply) {}
+  rpc cadastrarChavePix(KeyPixRequest) returns (KeyPixResponse) {}
 }
 
-message KeyManagerRequest {
-  string name = 1;
+message KeyPixRequest {
+  string clientId = 1;
+  TipoChave tipoChavePix = 2;
+  string valorChave = 3;
+  TipoConta tipoConta = 4;
+
+  enum TipoChave {
+    TIPO_CHAVE_DESCONHECIDA = 0;
+    CPF = 1;
+    TELEFONE_CELULAR = 2;
+    EMAIL = 3;
+    CHAVE_ALEATORIA = 4;
+  }
+
+  enum TipoConta {
+    TIPO_CONTA_DESCONHECIDA = 0;
+    CONTA_CORRENTE = 1;
+    CONTA_POUPANCA = 2;
+  }
 }
 
-message KeyManagerReply {
-  string message = 1;
+message KeyPixResponse {
+  string clientId = 1;
+  string pixId = 2;
 }
