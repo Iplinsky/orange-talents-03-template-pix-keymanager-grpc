@@ -1,11 +1,11 @@
-package br.com.zup.academy.pix.enumerator
+package br.com.zup.academy.pix.chave
 
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator
 import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator
 
 enum class TipoChaveEnum {
     CPF {
-        override fun validarFormatoDaChave(valorChave: String): Boolean {
+        override fun validarFormatoDaChave(valorChave: String?): Boolean {
             if (valorChave.isNullOrBlank()) {
                 return false
             }
@@ -18,8 +18,8 @@ enum class TipoChaveEnum {
             }
         }
     },
-    TELEFONE_CELULAR {
-        override fun validarFormatoDaChave(valorChave: String): Boolean {
+    TELEFONE {
+        override fun validarFormatoDaChave(valorChave: String?): Boolean {
             if (valorChave.isNullOrBlank()) {
                 return false
             }
@@ -27,7 +27,7 @@ enum class TipoChaveEnum {
         }
     },
     EMAIL {
-        override fun validarFormatoDaChave(valorChave: String): Boolean {
+        override fun validarFormatoDaChave(valorChave: String?): Boolean {
             if (valorChave.isNullOrBlank()) {
                 return false
             }
@@ -37,11 +37,11 @@ enum class TipoChaveEnum {
             }
         }
     },
-    CHAVE_ALEATORIA {
-        override fun validarFormatoDaChave(valorChave: String): Boolean {
+    ALEATORIA {
+        override fun validarFormatoDaChave(valorChave: String?): Boolean {
             return valorChave.isNullOrBlank()
         }
     };
 
-    abstract fun validarFormatoDaChave(valorChave: String): Boolean
+    abstract fun validarFormatoDaChave(valorChave: String?): Boolean
 }

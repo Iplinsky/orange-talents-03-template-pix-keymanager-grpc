@@ -1,8 +1,6 @@
 package br.com.zup.academy.pix.chave
 
 import br.com.zup.academy.pix.client.ContaUsuarioItau
-import br.com.zup.academy.pix.enumerator.TipoChaveEnum
-import br.com.zup.academy.pix.enumerator.TipoContaEnum
 import java.util.*
 import javax.persistence.*
 import javax.validation.Valid

@@ -1,7 +1,6 @@
 package br.com.zup.academy.pix.chave
 
 import br.com.zup.academy.pix.client.ContaUsuarioItau
-import br.com.zup.academy.pix.client.ItauClient
 import br.com.zup.academy.pix.client.ValidaComunicacaoErpItau
 import br.com.zup.academy.pix.exception.handler.ChavePixExistenteException
 import io.micronaut.validation.Validated
@@ -15,22 +14,21 @@ import javax.validation.constraints.NotNull
 @Singleton
 class ChavePixService(
     @Inject val pixRepository: ChavePixRepository,
-    @Inject val itauClient: ItauClient,
     @Inject val validaComunicacaoErpItau: ValidaComunicacaoErpItau
 ) {
     @Transactional
     fun cadastrarChavePix(@Valid pixDtoRequest: ChavePixRequest): @Valid @NotNull ChavePix {
 
-        if (pixRepository.existsByValorChave(pixDtoRequest.valorChave)) {
+        if (pixRepository.existsByValorChave(pixDtoRequest.valorChave!!)) {
             throw ChavePixExistenteException("A chave '${pixDtoRequest.valorChave}' já existe.")
         }
-
-        /* Comunica com o sistema ERP do Itau */
+        /**
+         * Comunica com o sistema ERP do Itau retornando a conta do usuário ou então uma exceção caso o usuário não exista na base de dados
+         **/
         var contaUsuario: ContaUsuarioItau = validaComunicacaoErpItau.comunicar(pixDtoRequest)
-
         val chavePix: ChavePix = pixDtoRequest.toModel(contaUsuario)
-        pixRepository.save(chavePix)
 
+        pixRepository.save(chavePix)
         return chavePix
     }
 

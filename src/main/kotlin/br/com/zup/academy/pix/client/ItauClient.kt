@@ -11,5 +11,5 @@ import io.micronaut.http.client.annotation.Client
 interface ItauClient {
 
     @Get("/api/v1/clientes/{clientId}/contas{?tipo}")
-    fun consultarContaDoClienteItau(@PathVariable clientId: String, @QueryValue tipo: String): HttpResponse<PixDtoResponse>
+    fun consultarContaDoClienteItau(@PathVariable clientId: String, @QueryValue tipo: String): HttpResponse<PixDtoResponse>?
 }

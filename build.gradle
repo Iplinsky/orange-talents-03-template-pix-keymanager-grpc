@@ -43,6 +43,14 @@ dependencies {
     implementation("io.micronaut:micronaut-http-client")
     implementation(group: 'org.hibernate', name: 'hibernate-validator', version: '6.1.6.Final')
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.12.+"
+    // Setting up JUnit 5
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("io.micronaut.test:micronaut-test-junit5:2.3.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    // Mockito
+    testImplementation("org.mockito:mockito-core")
+    implementation("org.mockito:mockito-junit-jupiter:3.10.0")
 
     // XML Serialization
     implementation("io.micronaut.xml:micronaut-jackson-xml")

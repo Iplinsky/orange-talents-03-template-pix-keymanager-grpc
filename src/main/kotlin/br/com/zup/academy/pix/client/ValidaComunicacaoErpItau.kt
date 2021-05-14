@@ -9,10 +9,9 @@ import javax.inject.Singleton
 class ValidaComunicacaoErpItau(@Inject val itauClient: ItauClient) {
 
     fun comunicar(pixDtoRequest: ChavePixRequest): ContaUsuarioItau {
-        val consultarContaDoClienteItau =
-            itauClient.consultarContaDoClienteItau(pixDtoRequest.clientId, pixDtoRequest.tipoConta.name)
+        val consultarContaDoClienteItau = itauClient.consultarContaDoClienteItau(pixDtoRequest.clientId!!, pixDtoRequest.tipoConta!!.name)
 
-        return consultarContaDoClienteItau.body()?.toModel()
+        return consultarContaDoClienteItau?.body()?.toModel()
             ?: throw ClientNotFoundException("Cliente não localizado no banco Itau.")
     }
 }

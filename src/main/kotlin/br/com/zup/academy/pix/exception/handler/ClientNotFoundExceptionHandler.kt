@@ -7,7 +7,6 @@ import javax.inject.Singleton
 
 @Singleton
 class ClientNotFoundExceptionHandler : ExceptionHandler<ClientNotFoundException> {
-
     override fun handle(ex: ClientNotFoundException): StatusWithDetails {
         return StatusWithDetails(
             Status.NOT_FOUND
