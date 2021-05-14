@@ -5,7 +5,6 @@ import br.com.zup.academy.KeyPixRequestCadastro
 import br.com.zup.academy.KeyPixResponseCadastro
 import br.com.zup.academy.pix.annotation.ErrorHandler
 import br.com.zup.academy.pix.chave.ChavePix
-import br.com.zup.academy.pix.chave.ChavePixRequest
 import br.com.zup.academy.pix.extension.function.toModel
 import io.grpc.stub.StreamObserver
 import javax.inject.Inject
@@ -17,12 +16,12 @@ class CadastraChaveGrpcEndpoint(@Inject private val pixService: CadastraChaveGrp
     KeyManagerCadastrarGrpcServiceGrpc.KeyManagerCadastrarGrpcServiceImplBase() {
 
     override fun cadastrarChavePix(request: KeyPixRequestCadastro, responseObserver: StreamObserver<KeyPixResponseCadastro>) {
-        val chave: ChavePixRequest = request.toModel()
-        val chaveCadastrada: ChavePix = pixService.cadastrarChavePix(chave)
+        val key: KeyPixCadastro = request.toModel()
+        val chaveCadastrada: ChavePix = pixService.cadastrarChavePix(key)
 
         responseObserver.onNext(
             KeyPixResponseCadastro.newBuilder()
-                .setClientId(chave.clientId)
+                .setClientId(key.clientId)
                 .setPixId(chaveCadastrada.id.toString()).build()
         )
         responseObserver.onCompleted()

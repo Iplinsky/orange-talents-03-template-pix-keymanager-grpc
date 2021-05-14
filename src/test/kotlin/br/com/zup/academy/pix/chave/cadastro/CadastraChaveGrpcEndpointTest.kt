@@ -1,7 +1,11 @@
-package br.com.zup.academy.pix.chave
+package br.com.zup.academy.pix.chave.cadastro
 
-import br.com.zup.academy.KeyManagerServiceGrpc
-import br.com.zup.academy.KeyPixRequest
+import br.com.zup.academy.KeyManagerCadastrarGrpcServiceGrpc
+import br.com.zup.academy.KeyPixRequestCadastro
+import br.com.zup.academy.pix.chave.ChavePix
+import br.com.zup.academy.pix.chave.ChavePixRepository
+import br.com.zup.academy.pix.chave.TipoChaveEnum
+import br.com.zup.academy.pix.chave.TipoContaEnum
 import br.com.zup.academy.pix.client.*
 import io.grpc.ManagedChannel
 import io.grpc.Status.*
@@ -13,8 +17,7 @@ import io.micronaut.http.HttpResponse
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
 import org.mockito.Mockito
 import org.mockito.Mockito.*
@@ -37,7 +40,7 @@ class CadastraChaveGrpcEndpointTest {
     lateinit var itauClient: ItauClient
 
     @field:Inject
-    lateinit var keyManagerServiceGrpc: KeyManagerServiceGrpc.KeyManagerServiceBlockingStub
+    lateinit var keyManagerServiceGrpc: KeyManagerCadastrarGrpcServiceGrpc.KeyManagerCadastrarGrpcServiceBlockingStub
 
     lateinit var pixDtoResponse: PixDtoResponse
 
@@ -48,7 +51,7 @@ class CadastraChaveGrpcEndpointTest {
 
         // Build PIX Response
         pixDtoResponse = PixDtoResponse(
-            tipo = KeyPixRequest.TipoConta.CONTA_CORRENTE_VALUE.toString(),
+            tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE_VALUE.toString(),
             instituicao = InstituicaoResponse("UNIBANCO ITAU SA", "ITAU_UNIBANCO_ISPB"),
             agencia = "7777",
             numero = "291900",
@@ -63,69 +66,72 @@ class CadastraChaveGrpcEndpointTest {
     @Test
     @Order(1)
     fun `deve cadastrar uma nova chave pix do tipo cpf`() {
-        `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequest.TipoConta.CONTA_CORRENTE.name))
+        `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name))
             .thenReturn(HttpResponse.ok(pixDtoResponse))
 
         val responseKeyPix = keyManagerServiceGrpc.cadastrarChavePix(
-            KeyPixRequest
+            KeyPixRequestCadastro
                 .newBuilder()
                 .setClientId(RANDOM_CLIENT_ID_PIX)
-                .setTipoChavePix(KeyPixRequest.TipoChave.CPF)
+                .setTipoChavePix(KeyPixRequestCadastro.TipoChave.CPF)
                 .setValorChave("01234567890")
-                .setTipoConta(KeyPixRequest.TipoConta.CONTA_CORRENTE)
+                .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE)
                 .build()
 
         )
         with(responseKeyPix) {
+            assertTrue(chavePixRepository.count() == 1L)
             assertNotNull(pixId)
             assertEquals(RANDOM_CLIENT_ID_PIX, clientId)
-            verify(itauClient, atMost(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequest.TipoConta.CONTA_CORRENTE.name)
+            verify(itauClient, atMost(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name)
         }
     }
 
     @Test
     @Order(2)
     fun `deve cadastrar uma nova chave pix do tipo email`() {
-        `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequest.TipoConta.CONTA_CORRENTE.name))
+        `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name))
             .thenReturn(HttpResponse.ok(pixDtoResponse))
 
         val responseKeyPix = keyManagerServiceGrpc.cadastrarChavePix(
-            KeyPixRequest
+            KeyPixRequestCadastro
                 .newBuilder()
                 .setClientId(RANDOM_CLIENT_ID_PIX)
-                .setTipoChavePix(KeyPixRequest.TipoChave.EMAIL)
+                .setTipoChavePix(KeyPixRequestCadastro.TipoChave.EMAIL)
                 .setValorChave("thiago.iplinsky@zup.com.br")
-                .setTipoConta(KeyPixRequest.TipoConta.CONTA_CORRENTE)
+                .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE)
                 .build()
 
         )
         with(responseKeyPix) {
+            assertTrue(chavePixRepository.count() == 1L)
             assertNotNull(pixId)
             assertEquals(RANDOM_CLIENT_ID_PIX, clientId)
-            verify(itauClient, atMost(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequest.TipoConta.CONTA_CORRENTE.name)
+            verify(itauClient, atMost(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name)
         }
     }
 
     @Test
     @Order(3)
     fun `deve cadastrar uma nova chave pix do tipo telefone celular`() {
-        `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequest.TipoConta.CONTA_CORRENTE.name))
+        `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name))
             .thenReturn(HttpResponse.ok(pixDtoResponse))
 
         val responseKeyPix = keyManagerServiceGrpc.cadastrarChavePix(
-            KeyPixRequest
+            KeyPixRequestCadastro
                 .newBuilder()
                 .setClientId(RANDOM_CLIENT_ID_PIX)
-                .setTipoChavePix(KeyPixRequest.TipoChave.TELEFONE_CELULAR)
+                .setTipoChavePix(KeyPixRequestCadastro.TipoChave.TELEFONE)
                 .setValorChave("+5585988714077")
-                .setTipoConta(KeyPixRequest.TipoConta.CONTA_CORRENTE)
+                .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE)
                 .build()
 
         )
         with(responseKeyPix) {
+            assertTrue(chavePixRepository.count() == 1L)
             assertNotNull(pixId)
             assertEquals(RANDOM_CLIENT_ID_PIX, clientId)
-            verify(itauClient, atMost(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequest.TipoConta.CONTA_CORRENTE.name)
+            verify(itauClient, atMost(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name)
         }
     }
 
@@ -144,43 +150,43 @@ class CadastraChaveGrpcEndpointTest {
 
         val exceptionResponse = assertThrows<StatusRuntimeException> {
             keyManagerServiceGrpc.cadastrarChavePix(
-                KeyPixRequest
+                KeyPixRequestCadastro
                     .newBuilder()
                     .setClientId(RANDOM_CLIENT_ID_PIX)
-                    .setTipoChavePix(KeyPixRequest.TipoChave.CPF)
+                    .setTipoChavePix(KeyPixRequestCadastro.TipoChave.CPF)
                     .setValorChave("01234567890")
-                    .setTipoConta(KeyPixRequest.TipoConta.CONTA_CORRENTE)
+                    .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE)
                     .build()
             )
         }
         with(exceptionResponse) {
             assertEquals(ALREADY_EXISTS.code, status.code)
             assertEquals("A chave '01234567890' já existe.", status.description)
-            verify(itauClient, times(0)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequest.TipoConta.CONTA_CORRENTE.name)
+            verify(itauClient, times(0)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name)
         }
     }
 
     @Test
     @Order(5)
     fun `nao deve registrar uma chave pix para um usuario nao encontrado`() {
-        `when`(itauClient.consultarContaDoClienteItau(RANDOM_CLIENT_ID_PIX, KeyPixRequest.TipoConta.CONTA_POUPANCA.name))
+        `when`(itauClient.consultarContaDoClienteItau(RANDOM_CLIENT_ID_PIX, KeyPixRequestCadastro.TipoConta.CONTA_POUPANCA.name))
             .thenReturn(HttpResponse.notFound())
 
         val exceptionResponse = assertThrows<StatusRuntimeException> {
             keyManagerServiceGrpc.cadastrarChavePix(
-                KeyPixRequest
+                KeyPixRequestCadastro
                     .newBuilder()
                     .setClientId(RANDOM_CLIENT_ID_PIX)
-                    .setTipoChavePix(KeyPixRequest.TipoChave.CPF)
+                    .setTipoChavePix(KeyPixRequestCadastro.TipoChave.CPF)
                     .setValorChave("98765432100")
-                    .setTipoConta(KeyPixRequest.TipoConta.CONTA_POUPANCA)
+                    .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_POUPANCA)
                     .build()
             )
         }
         with(exceptionResponse) {
             assertEquals(NOT_FOUND.code, status.code)
             assertEquals("Cliente não localizado no banco Itau.", status.description)
-            verify(itauClient, times(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequest.TipoConta.CONTA_POUPANCA.name)
+            verify(itauClient, times(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_POUPANCA.name)
         }
     }
 
@@ -188,17 +194,17 @@ class CadastraChaveGrpcEndpointTest {
     @Order(6)
     fun `nao deve cadastrar uma chave pix com valores invalidos`() {
         val exceptionResponse = assertThrows<StatusRuntimeException> {
-            keyManagerServiceGrpc.cadastrarChavePix(KeyPixRequest.newBuilder().build())
+            keyManagerServiceGrpc.cadastrarChavePix(KeyPixRequestCadastro.newBuilder().build())
         }
         with(exceptionResponse) {
             assertEquals(INVALID_ARGUMENT.code, status.code)
-            verify(itauClient, never()).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequest.TipoConta.CONTA_POUPANCA.name)
+            verify(itauClient, never()).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_POUPANCA.name)
         }
     }
 
     @Factory
-    fun gRpcServerBlockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeyManagerServiceGrpc.KeyManagerServiceBlockingStub? {
-        return KeyManagerServiceGrpc.newBlockingStub(channel)
+    fun gRpcServerBlockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): KeyManagerCadastrarGrpcServiceGrpc.KeyManagerCadastrarGrpcServiceBlockingStub? {
+        return KeyManagerCadastrarGrpcServiceGrpc.newBlockingStub(channel)
     }
 
     @MockBean(ItauClient::class)

@@ -1,6 +1,6 @@
 package br.com.zup.academy.pix.annotation
 
-import br.com.zup.academy.pix.chave.ChavePixRequest
+import br.com.zup.academy.pix.chave.cadastro.KeyPixCadastro
 import io.micronaut.core.annotation.AnnotationValue
 import io.micronaut.validation.validator.constraints.ConstraintValidator
 import io.micronaut.validation.validator.constraints.ConstraintValidatorContext
@@ -23,9 +23,9 @@ annotation class PixKey(
 )
 
 @Singleton
-class PixKeyValidator : ConstraintValidator<PixKey, ChavePixRequest> {
+class PixKeyValidator : ConstraintValidator<PixKey, KeyPixCadastro> {
     override fun isValid(
-        value: ChavePixRequest?, annotationMetadata: AnnotationValue<PixKey>, context: ConstraintValidatorContext): Boolean {
+        value: KeyPixCadastro?, annotationMetadata: AnnotationValue<PixKey>, context: ConstraintValidatorContext): Boolean {
         if (value?.tipoChavePix == null) {
             return false
         }
