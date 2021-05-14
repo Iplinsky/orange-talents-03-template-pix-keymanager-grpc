@@ -33,6 +33,6 @@ class ChavePix(
     val contaUsuarioItau: ContaUsuarioItau
 ) {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
+    @GeneratedValue
+    val id: UUID? = null
 }

@@ -6,11 +6,17 @@ option java_outer_classname = "KeyManager";
 
 package br.com.zup.academy;
 
-service KeyManagerService {
-  rpc cadastrarChavePix(KeyPixRequest) returns (KeyPixResponse) {}
+service KeyManagerCadastrarGrpcService {
+  rpc cadastrarChavePix(KeyPixRequestCadastro) returns (KeyPixResponseCadastro) {}
 }
 
-message KeyPixRequest {
+service  KeyManagerRemoveGrpcService {
+  rpc removerChavePix(KeyPixRequestRemove) returns (KeyPixResponseRemove) {}
+}
+
+/********* CADASTRO *********/
+
+message KeyPixRequestCadastro {
   string clientId = 1;
   TipoChave tipoChavePix = 2;
   string valorChave = 3;
@@ -31,7 +37,18 @@ message KeyPixRequest {
   }
 }
 
-message KeyPixResponse {
+message KeyPixResponseCadastro {
   string clientId = 1;
   string pixId = 2;
+}
+
+/********* REMOVE *********/
+
+message KeyPixRequestRemove {
+  string pixId = 1;
+  string clientId = 2;
+}
+
+message KeyPixResponseRemove {
+  string pixId = 1;
 }

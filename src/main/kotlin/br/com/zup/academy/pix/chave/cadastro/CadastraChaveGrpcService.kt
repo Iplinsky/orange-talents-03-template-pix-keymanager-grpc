@@ -1,5 +1,8 @@
-package br.com.zup.academy.pix.chave
+package br.com.zup.academy.pix.chave.cadastro
 
+import br.com.zup.academy.pix.chave.ChavePix
+import br.com.zup.academy.pix.chave.ChavePixRepository
+import br.com.zup.academy.pix.chave.ChavePixRequest
 import br.com.zup.academy.pix.client.ContaUsuarioItau
 import br.com.zup.academy.pix.client.ValidaComunicacaoErpItau
 import br.com.zup.academy.pix.exception.handler.ChavePixExistenteException
@@ -12,7 +15,7 @@ import javax.validation.constraints.NotNull
 
 @Validated
 @Singleton
-class ChavePixService(
+class CadastraChaveGrpcService(
     @Inject val pixRepository: ChavePixRepository,
     @Inject val validaComunicacaoErpItau: ValidaComunicacaoErpItau
 ) {
