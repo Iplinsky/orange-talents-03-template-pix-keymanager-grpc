@@ -1,4 +1,4 @@
-package br.com.zup.academy.pix.client
+package br.com.zup.academy.pix.client.itau
 
 data class PixDtoResponse(
     val tipo: String,

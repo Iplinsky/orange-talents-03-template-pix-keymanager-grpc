@@ -1,6 +1,6 @@
 package br.com.zup.academy.pix.chave
 
-import br.com.zup.academy.pix.client.ContaUsuarioItau
+import br.com.zup.academy.pix.client.itau.ContaUsuarioItau
 import java.util.*
 import javax.persistence.*
 import javax.validation.Valid
@@ -20,7 +20,7 @@ class ChavePix(
 
     @field:NotBlank
     @Column(nullable = false, unique = true)
-    val valorChave: String,
+    var valorChave: String,
 
 
     @field:NotNull

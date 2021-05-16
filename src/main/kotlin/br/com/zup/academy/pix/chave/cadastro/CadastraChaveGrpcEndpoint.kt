@@ -6,6 +6,8 @@ import br.com.zup.academy.KeyPixResponseCadastro
 import br.com.zup.academy.pix.annotation.ErrorHandler
 import br.com.zup.academy.pix.chave.ChavePix
 import br.com.zup.academy.pix.extension.function.toModel
+import io.grpc.Status
+import io.grpc.StatusRuntimeException
 import io.grpc.stub.StreamObserver
 import javax.inject.Inject
 import javax.inject.Singleton

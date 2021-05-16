@@ -18,6 +18,7 @@ enum class TipoChaveEnum {
             }
         }
     },
+
     TELEFONE {
         override fun validarFormatoDaChave(valorChave: String?): Boolean {
             if (valorChave.isNullOrBlank()) {
@@ -26,6 +27,7 @@ enum class TipoChaveEnum {
             return valorChave.matches(regex = "^\\+[1-9][0-9]\\d{1,14}\$".toRegex())
         }
     },
+
     EMAIL {
         override fun validarFormatoDaChave(valorChave: String?): Boolean {
             if (valorChave.isNullOrBlank()) {
@@ -37,6 +39,7 @@ enum class TipoChaveEnum {
             }
         }
     },
+
     ALEATORIA {
         override fun validarFormatoDaChave(valorChave: String?): Boolean {
             return valorChave.isNullOrBlank()

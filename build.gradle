@@ -51,7 +51,6 @@ dependencies {
     // Mockito
     testImplementation("org.mockito:mockito-core")
     implementation("org.mockito:mockito-junit-jupiter:3.10.0")
-
     // XML Serialization
     implementation("io.micronaut.xml:micronaut-jackson-xml")
 }

@@ -5,7 +5,7 @@ import br.com.zup.academy.pix.annotation.ValidUUID
 import br.com.zup.academy.pix.chave.ChavePix
 import br.com.zup.academy.pix.chave.TipoChaveEnum
 import br.com.zup.academy.pix.chave.TipoContaEnum
-import br.com.zup.academy.pix.client.ContaUsuarioItau
+import br.com.zup.academy.pix.client.itau.ContaUsuarioItau
 import io.micronaut.core.annotation.Introspected
 import java.util.*
 import javax.validation.constraints.NotBlank

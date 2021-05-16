@@ -14,7 +14,7 @@ class DefaultExceptionHandler : ExceptionHandler<Exception> {
         val status = when (e) {
             is IllegalArgumentException -> Status.INVALID_ARGUMENT.withDescription(e.message)
             is IllegalStateException -> Status.FAILED_PRECONDITION.withDescription(e.message)
-            else -> Status.UNKNOWN
+            else -> Status.UNKNOWN.withDescription(e.message)
         }
         return StatusWithDetails(status.withCause(e))
     }

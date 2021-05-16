@@ -13,6 +13,7 @@ import javax.inject.Singleton
 @Singleton
 class RemoveChaveGrpcEndpoint(@Inject private val pixService: RemoveChaveGrpcService) :
     KeyManagerRemoveGrpcServiceGrpc.KeyManagerRemoveGrpcServiceImplBase() {
+
     override fun removerChavePix(request: KeyPixRequestRemove, responseObserver: StreamObserver<KeyPixResponseRemove>) {
         pixService.remover(request.toModel())
 

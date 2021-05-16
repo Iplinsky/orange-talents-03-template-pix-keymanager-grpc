@@ -1,4 +1,4 @@
-package br.com.zup.academy.pix.client
+package br.com.zup.academy.pix.client.itau
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Get
@@ -7,7 +7,7 @@ import io.micronaut.http.annotation.QueryValue
 import io.micronaut.http.client.annotation.Client
 
 
-@Client(value = "\${url.client.itau}")
+@Client(value = "\${itau.client.url}")
 interface ItauClient {
 
     @Get("/api/v1/clientes/{clientId}/contas{?tipo}")

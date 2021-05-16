@@ -2,8 +2,9 @@ package br.com.zup.academy.pix.chave.cadastro
 
 import br.com.zup.academy.pix.chave.ChavePix
 import br.com.zup.academy.pix.chave.ChavePixRepository
-import br.com.zup.academy.pix.client.ContaUsuarioItau
-import br.com.zup.academy.pix.client.ValidaComunicacaoErpItau
+import br.com.zup.academy.pix.client.bcb.ValidaCadastroChavePixBcb
+import br.com.zup.academy.pix.client.itau.ContaUsuarioItau
+import br.com.zup.academy.pix.client.itau.ValidaComunicacaoErpItau
 import br.com.zup.academy.pix.exception.handler.ChavePixExistenteException
 import io.micronaut.validation.Validated
 import javax.inject.Inject
@@ -16,7 +17,8 @@ import javax.validation.constraints.NotNull
 @Singleton
 class CadastraChaveGrpcService(
     @Inject val pixRepository: ChavePixRepository,
-    @Inject val validaComunicacaoErpItau: ValidaComunicacaoErpItau
+    @Inject val validaComunicacaoErpItau: ValidaComunicacaoErpItau,
+    @Inject val validaCadastroChavePixBcb: ValidaCadastroChavePixBcb,
 ) {
     @Transactional
     fun cadastrarChavePix(@Valid pixDtoCadastro: KeyPixCadastro): @Valid @NotNull ChavePix {
@@ -31,6 +33,10 @@ class CadastraChaveGrpcService(
         val chavePix: ChavePix = pixDtoCadastro.toModel(contaUsuario)
 
         pixRepository.save(chavePix)
+
+        validaCadastroChavePixBcb.comunicar(chavePix).also {
+            println("Realizando o registro global da chave PIX no sistema do Banco Central do Brasil (BCB).")
+        }
         return chavePix
     }
 

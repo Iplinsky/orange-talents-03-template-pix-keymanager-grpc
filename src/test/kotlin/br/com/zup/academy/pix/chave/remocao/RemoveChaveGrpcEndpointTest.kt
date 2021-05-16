@@ -7,7 +7,7 @@ import br.com.zup.academy.pix.chave.ChavePix
 import br.com.zup.academy.pix.chave.ChavePixRepository
 import br.com.zup.academy.pix.chave.TipoChaveEnum
 import br.com.zup.academy.pix.chave.TipoContaEnum.CONTA_CORRENTE
-import br.com.zup.academy.pix.client.ContaUsuarioItau
+import br.com.zup.academy.pix.client.itau.ContaUsuarioItau
 import io.grpc.ManagedChannel
 import io.grpc.Status.NOT_FOUND
 import io.grpc.StatusRuntimeException

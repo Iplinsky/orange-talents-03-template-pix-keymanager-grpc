@@ -6,7 +6,7 @@ import br.com.zup.academy.pix.chave.ChavePix
 import br.com.zup.academy.pix.chave.ChavePixRepository
 import br.com.zup.academy.pix.chave.TipoChaveEnum
 import br.com.zup.academy.pix.chave.TipoContaEnum
-import br.com.zup.academy.pix.client.*
+import br.com.zup.academy.pix.client.itau.*
 import io.grpc.ManagedChannel
 import io.grpc.Status.*
 import io.grpc.StatusRuntimeException
