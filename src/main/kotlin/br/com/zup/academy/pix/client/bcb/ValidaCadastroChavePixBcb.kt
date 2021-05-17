@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class ValidaCadastroChavePixBcb(@Inject val bcbClient: BcbClient) {
 
-    fun comunicar(chavePix: ChavePix) {
+    fun cadastrarChavePixNoBcb(chavePix: ChavePix) {
         val response: HttpResponse<BcbPixResponse>
         try {
             response = bcbClient.cadastrarChavePixNoBcbClient(BcbPixRequest.fill(chavePix))
@@ -19,8 +19,8 @@ class ValidaCadastroChavePixBcb(@Inject val bcbClient: BcbClient) {
         }
 
         with(response) {
-            (status != HttpStatus.CREATED)
-                ?: throw IllegalStateException("Erro ao registrar a chave PIX no Banco Central do Brasil (BCB)")
+            if (status != HttpStatus.CREATED)
+                throw IllegalStateException("Erro ao registrar a chave PIX no Banco Central do Brasil (BCB)")
         }.apply { chavePix.valorChave = response.body().key }
     }
 

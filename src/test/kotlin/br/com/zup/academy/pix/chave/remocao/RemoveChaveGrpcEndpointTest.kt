@@ -7,17 +7,26 @@ import br.com.zup.academy.pix.chave.ChavePix
 import br.com.zup.academy.pix.chave.ChavePixRepository
 import br.com.zup.academy.pix.chave.TipoChaveEnum
 import br.com.zup.academy.pix.chave.TipoContaEnum.CONTA_CORRENTE
+import br.com.zup.academy.pix.client.bcb.BcbClient
+import br.com.zup.academy.pix.client.bcb.BcbPixDeleteRequest
+import br.com.zup.academy.pix.client.bcb.BcbPixDeleteResponse
 import br.com.zup.academy.pix.client.itau.ContaUsuarioItau
 import io.grpc.ManagedChannel
+import io.grpc.Status
 import io.grpc.Status.NOT_FOUND
 import io.grpc.StatusRuntimeException
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
+import io.micronaut.http.HttpResponse
+import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
+import org.mockito.Mockito
+import org.mockito.Mockito.*
+import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 
@@ -35,6 +44,9 @@ internal class RemoveChaveGrpcEndpointTest {
 
     @field:Inject
     lateinit var keyManagerServiceGrpc: KeyManagerRemoveGrpcServiceGrpc.KeyManagerRemoveGrpcServiceBlockingStub
+
+    @field:Inject
+    lateinit var bcbClient: BcbClient
 
     lateinit var chavePix: ChavePix
 
@@ -56,6 +68,10 @@ internal class RemoveChaveGrpcEndpointTest {
     @Test
     @Order(1)
     fun `deve remover a chave PIX cadastrada no sistema`() {
+
+        `when`(bcbClient.removerChavePixNoBcbClient(chavePix.id.toString(),
+            pixDeleteRequest())).thenReturn(HttpResponse.ok(pixDeleteResponse()))
+
         val response: KeyPixResponseRemove = keyManagerServiceGrpc.removerChavePix(
             KeyPixRequestRemove
                 .newBuilder()
@@ -65,6 +81,7 @@ internal class RemoveChaveGrpcEndpointTest {
         )
         with(response) {
             assertEquals(response.pixId, chavePix.id.toString())
+            verify(bcbClient, times(1)).removerChavePixNoBcbClient(chavePix.id.toString(), pixDeleteRequest())
         }
     }
 
@@ -84,10 +101,9 @@ internal class RemoveChaveGrpcEndpointTest {
 
         with(exception) {
             assertEquals(exception.status.code, NOT_FOUND.code)
-            assertEquals(
-                exception.status.description,
-                "A chave '$newRandomPixId' não foi localizada ou não pertence ao cliente informado."
-            )
+            assertEquals(exception.status.description,
+                "A chave '$newRandomPixId' não foi localizada ou não pertence ao cliente informado.")
+            verify(bcbClient, never()).removerChavePixNoBcbClient(chavePix.id.toString(), pixDeleteRequest())
         }
     }
 
@@ -115,8 +131,43 @@ internal class RemoveChaveGrpcEndpointTest {
         }
     }
 
+    @Test
+    @Order(4)
+    fun `nao deve remover a chave PIX caso ocorra algum problema na comunicacao com o sistema do BCB`() {
+        `when`(bcbClient.removerChavePixNoBcbClient(chavePix.id.toString(),
+            pixDeleteRequest())).thenReturn(HttpResponse.badRequest())
+
+        val responseException = assertThrows<StatusRuntimeException> {
+            keyManagerServiceGrpc.removerChavePix(
+                KeyPixRequestRemove
+                    .newBuilder()
+                    .setClientId(chavePix.clientId.toString())
+                    .setPixId(chavePix.id.toString())
+                    .build()
+            )
+        }
+        with(responseException) {
+            assertEquals(Status.FAILED_PRECONDITION.code, responseException.status.code)
+            assertEquals("Erro ao remover a chave PIX no sistema do Banco Central do Brasil (BCB)", responseException.status.description)
+            verify(bcbClient, atMost(1)).removerChavePixNoBcbClient(chavePix.id.toString(), pixDeleteRequest())
+        }
+    }
+
     @Factory
     fun gRpcServerBlockingStub(@GrpcChannel(value = GrpcServerChannel.NAME) channel: ManagedChannel): KeyManagerRemoveGrpcServiceGrpc.KeyManagerRemoveGrpcServiceBlockingStub? {
         return KeyManagerRemoveGrpcServiceGrpc.newBlockingStub(channel)
+    }
+
+    @MockBean(BcbClient::class)
+    fun mockandoBcbClient(): BcbClient? {
+        return Mockito.mock(BcbClient::class.java)
+    }
+
+    fun pixDeleteRequest(): BcbPixDeleteRequest {
+        return BcbPixDeleteRequest(chavePix.id.toString(), ContaUsuarioItau.ITAU_UNIBANCO_ISPB)
+    }
+
+    fun pixDeleteResponse(): BcbPixDeleteResponse {
+        return BcbPixDeleteResponse(chavePix.id.toString(), ContaUsuarioItau.ITAU_UNIBANCO_ISPB, LocalDateTime.now())
     }
 }

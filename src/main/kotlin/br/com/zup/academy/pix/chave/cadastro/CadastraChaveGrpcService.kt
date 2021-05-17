@@ -34,7 +34,7 @@ class CadastraChaveGrpcService(
 
         pixRepository.save(chavePix)
 
-        validaCadastroChavePixBcb.comunicar(chavePix).also {
+        validaCadastroChavePixBcb.cadastrarChavePixNoBcb(chavePix).also {
             println("Realizando o registro global da chave PIX no sistema do Banco Central do Brasil (BCB).")
         }
         return chavePix

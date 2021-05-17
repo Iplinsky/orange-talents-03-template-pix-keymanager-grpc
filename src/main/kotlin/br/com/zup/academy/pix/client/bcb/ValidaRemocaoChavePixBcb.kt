@@ -18,8 +18,8 @@ class ValidaRemocaoChavePixBcb(@Inject val bcbClient: BcbClient) {
             throw  ex
         }
         with(response) {
-            (status != OK)
-                ?: throw IllegalStateException("Erro ao remover a chave PIX no sistema do Banco Central do Brasil (BCB)")
+            if (status != OK)
+                throw IllegalStateException("Erro ao remover a chave PIX no sistema do Banco Central do Brasil (BCB)")
         }
     }
 }
