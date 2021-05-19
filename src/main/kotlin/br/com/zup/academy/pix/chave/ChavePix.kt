@@ -1,6 +1,7 @@
 package br.com.zup.academy.pix.chave
 
 import br.com.zup.academy.pix.client.itau.ContaUsuarioItau
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.validation.Valid
@@ -30,9 +31,20 @@ class ChavePix(
 
     @Embedded
     @field:Valid
-    val contaUsuarioItau: ContaUsuarioItau
+    val contaUsuarioItau: ContaUsuarioItau,
 ) {
     @Id
     @GeneratedValue
     val id: UUID? = null
+
+    @field:NotNull
+    val momentoCadastro: LocalDateTime = LocalDateTime.now()
+
+    // Verifica se a chave recebida pertence ao cliente.
+    fun pertenceAoCliente(clientIdVerify: UUID): Boolean {
+        if (clientIdVerify != clientId) {
+            return false
+        }
+        return true
+    }
 }

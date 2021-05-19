@@ -1,10 +1,8 @@
 package br.com.zup.academy.pix.client.itau
 
-import io.micronaut.core.annotation.Introspected
 import io.micronaut.data.annotation.Embeddable
 
 @Embeddable
-@Introspected
 class ContaUsuarioItau(
     val tipo: String = "",
     val instituicao: String = "",

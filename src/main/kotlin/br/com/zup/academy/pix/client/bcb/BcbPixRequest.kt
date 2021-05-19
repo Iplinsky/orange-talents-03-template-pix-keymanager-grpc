@@ -36,7 +36,7 @@ data class BcbPixRequest(
                     accountType = AccountType.by(chavePix.tipoConta)
                 ),
                 owner = Owner(
-                    type = Type.NATURAL_PERSON,
+                    type = TypePersonEnum.NATURAL_PERSON,
                     name = chavePix.contaUsuarioItau.nomeTitular,
                     taxIdNumber = chavePix.contaUsuarioItau.cpfTitular
                 )

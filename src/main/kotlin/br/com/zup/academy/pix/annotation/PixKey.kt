@@ -29,7 +29,7 @@ class PixKeyValidator : ConstraintValidator<PixKey, KeyPixCadastro> {
         if (value?.tipoChavePix == null) {
             return false
         }
-        return value.tipoChavePix.validarFormatoDaChave(value.valorChave!!)
+        return value.tipoChavePix.validarFormatoDaChave(value.valorChave)
     }
 
 }

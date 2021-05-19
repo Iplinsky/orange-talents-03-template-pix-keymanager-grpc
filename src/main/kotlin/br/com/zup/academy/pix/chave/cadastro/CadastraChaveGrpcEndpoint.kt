@@ -6,9 +6,8 @@ import br.com.zup.academy.KeyPixResponseCadastro
 import br.com.zup.academy.pix.annotation.ErrorHandler
 import br.com.zup.academy.pix.chave.ChavePix
 import br.com.zup.academy.pix.extension.function.toModel
-import io.grpc.Status
-import io.grpc.StatusRuntimeException
 import io.grpc.stub.StreamObserver
+import org.slf4j.LoggerFactory
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,9 +16,18 @@ import javax.inject.Singleton
 class CadastraChaveGrpcEndpoint(@Inject private val pixService: CadastraChaveGrpcService) :
     KeyManagerCadastrarGrpcServiceGrpc.KeyManagerCadastrarGrpcServiceImplBase() {
 
-    override fun cadastrarChavePix(request: KeyPixRequestCadastro, responseObserver: StreamObserver<KeyPixResponseCadastro>) {
+    private val LOGGER = LoggerFactory.getLogger(this.javaClass)
+
+    override fun cadastrarChavePix(
+        request: KeyPixRequestCadastro,
+        responseObserver: StreamObserver<KeyPixResponseCadastro>,
+    ) {
         val key: KeyPixCadastro = request.toModel()
         val chaveCadastrada: ChavePix = pixService.cadastrarChavePix(key)
+
+
+        LOGGER.info(key.clientId)
+        LOGGER.info(chaveCadastrada.id.toString())
 
         responseObserver.onNext(
             KeyPixResponseCadastro.newBuilder()

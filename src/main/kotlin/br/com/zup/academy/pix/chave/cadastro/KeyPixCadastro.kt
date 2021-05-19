@@ -17,24 +17,24 @@ import javax.validation.constraints.Size
 data class KeyPixCadastro(
     @ValidUUID
     @field:NotBlank
-    val clientId: String?,
+    val clientId: String,
 
     @field:NotNull
-    val tipoChavePix: TipoChaveEnum?,
+    val tipoChavePix: TipoChaveEnum,
 
     @field:NotBlank
     @field:Size(max = 77)
-    val valorChave: String?,
+    val valorChave: String,
 
     @field:NotNull
-    val tipoConta: TipoContaEnum?
+    val tipoConta: TipoContaEnum
 ) {
     fun toModel(conta: ContaUsuarioItau): ChavePix {
         return ChavePix(
             clientId = UUID.fromString(clientId),
-            tipoChavePix = TipoChaveEnum.valueOf(this.tipoChavePix!!.name),
-            valorChave = if (this.tipoChavePix == TipoChaveEnum.ALEATORIA) UUID.randomUUID().toString() else this.valorChave!!,
-            tipoConta = TipoContaEnum.valueOf(this.tipoConta!!.name),
+            tipoChavePix = TipoChaveEnum.valueOf(this.tipoChavePix.name),
+            valorChave = if (this.tipoChavePix == TipoChaveEnum.ALEATORIA) UUID.randomUUID().toString() else this.valorChave,
+            tipoConta = TipoContaEnum.valueOf(this.tipoConta.name),
             contaUsuarioItau = conta
         )
     }

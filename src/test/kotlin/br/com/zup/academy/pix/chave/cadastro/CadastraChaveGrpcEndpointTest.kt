@@ -272,7 +272,7 @@ class CadastraChaveGrpcEndpointTest {
                 accountType = AccountType.by(TipoContaEnum.CONTA_CORRENTE)
             ),
             owner = Owner(
-                type = Type.NATURAL_PERSON,
+                type = TypePersonEnum.NATURAL_PERSON,
                 name = "Thiago Iplinsky",
                 taxIdNumber = "01234567890"
             )
@@ -290,7 +290,7 @@ class CadastraChaveGrpcEndpointTest {
                 accountType = AccountType.by(TipoContaEnum.CONTA_CORRENTE)
             ),
             owner = Owner(
-                type = Type.NATURAL_PERSON,
+                type = TypePersonEnum.NATURAL_PERSON,
                 name = "Thiago Iplinsky",
                 taxIdNumber = "01234567890"
             ),
@@ -309,7 +309,7 @@ class CadastraChaveGrpcEndpointTest {
                 accountType = AccountType.by(TipoContaEnum.CONTA_CORRENTE)
             ),
             owner = Owner(
-                type = Type.NATURAL_PERSON,
+                type = TypePersonEnum.NATURAL_PERSON,
                 name = "Thiago Iplinsky",
                 taxIdNumber = "01234567890"
             )
@@ -327,7 +327,7 @@ class CadastraChaveGrpcEndpointTest {
                 accountType = AccountType.by(TipoContaEnum.CONTA_CORRENTE)
             ),
             owner = Owner(
-                type = Type.NATURAL_PERSON,
+                type = TypePersonEnum.NATURAL_PERSON,
                 name = "Thiago Iplinsky",
                 taxIdNumber = "01234567890"
             ),
@@ -346,7 +346,7 @@ class CadastraChaveGrpcEndpointTest {
                 accountType = AccountType.by(TipoContaEnum.CONTA_CORRENTE)
             ),
             owner = Owner(
-                type = Type.NATURAL_PERSON,
+                type = TypePersonEnum.NATURAL_PERSON,
                 name = "Thiago Iplinsky",
                 taxIdNumber = "01234567890"
             )
@@ -364,7 +364,7 @@ class CadastraChaveGrpcEndpointTest {
                 accountType = AccountType.by(TipoContaEnum.CONTA_CORRENTE)
             ),
             owner = Owner(
-                type = Type.NATURAL_PERSON,
+                type = TypePersonEnum.NATURAL_PERSON,
                 name = "Thiago Iplinsky",
                 taxIdNumber = "01234567890"
             ),

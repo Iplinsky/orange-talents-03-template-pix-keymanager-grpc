@@ -7,12 +7,12 @@ import javax.validation.constraints.NotBlank
 @Introspected
 class KeyPixRemove(
     @field:NotBlank
-    @ValidUUID(message = "Identificador com formato inválido")
+    @ValidUUID(message = "A chave Pix informada está com um formato inválido.")
     val pixId: String?,
 
     @field:NotBlank
-    @ValidUUID(message = "Identificador com formato inválido")
-    val clientId: String?
+    @ValidUUID(message = "O código identificador do cliente está com um formato inválido.")
+    val clientId: String?,
 ) {
 
 }

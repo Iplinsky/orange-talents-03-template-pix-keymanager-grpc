@@ -20,7 +20,7 @@ class RemoveChaveGrpcService(
     @Transactional
     fun remover(@Valid keyPixRemove: KeyPixRemove) {
         val pixId = UUID.fromString(keyPixRemove.pixId!!)
-        val exist: Boolean = chavePixRepository.existsByIdAndClientId(pixId, UUID.fromString(keyPixRemove.clientId!!))
+        val exist = chavePixRepository.existsByIdAndClientId(pixId, UUID.fromString(keyPixRemove.clientId!!))
 
         if (!exist) throw ChavePixNaoEncontradaException("A chave '$pixId' não foi localizada ou não pertence ao cliente informado.")
 

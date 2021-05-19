@@ -23,7 +23,7 @@ class CadastraChaveGrpcService(
     @Transactional
     fun cadastrarChavePix(@Valid pixDtoCadastro: KeyPixCadastro): @Valid @NotNull ChavePix {
 
-        if (pixRepository.existsByValorChave(pixDtoCadastro.valorChave!!)) {
+        if (pixRepository.existsByValorChave(pixDtoCadastro.valorChave)) {
             throw ChavePixExistenteException("A chave '${pixDtoCadastro.valorChave}' já existe.")
         }
         /**
