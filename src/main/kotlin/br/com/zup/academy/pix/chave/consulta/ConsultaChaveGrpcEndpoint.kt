@@ -15,7 +15,7 @@ import javax.validation.Validator
 
 @ErrorHandler
 @Singleton
-class   ConsultaChaveGrpcEndpoint(
+class ConsultaChaveGrpcEndpoint(
     @Inject private val repository: ChavePixRepository,
     @Inject private val bcbClient: BcbClient,
     @Inject private val validator: Validator,

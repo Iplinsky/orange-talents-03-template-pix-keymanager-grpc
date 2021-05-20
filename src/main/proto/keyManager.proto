@@ -20,6 +20,10 @@ service KeymanagerConsultarGrpcService {
   rpc consultarChavePix(KeyPixRequestConsulta) returns (KeyPixResponseConsulta) {}
 }
 
+service  KeyManagerConsultarTodasGrpcService {
+  rpc consultarTodasChavesPix(KeyPixRequestConsultaTodas) returns (KeyPixResponseConsultaTodas) {}
+}
+
 /********* CADASTRO *********/
 
 enum TipoChave {
@@ -60,7 +64,7 @@ message KeyPixResponseRemove {
   string pixId = 1;
 }
 
-/********* CONSULTA *********/
+/********* CONSULTA ESPECÍFICA *********/
 
 message KeyPixRequestConsulta {
   message SearchByPixAndClientId {
@@ -91,4 +95,22 @@ message KeyPixResponseConsulta {
   string clienteId = 1;
   string pixId = 2;
   ChavePix chave = 3;
+}
+
+/********* CONSULTA GERAL *********/
+
+message KeyPixRequestConsultaTodas {
+  string clientId = 1;
+}
+
+message KeyPixResponseConsultaTodas {
+  message ChavePix {
+    string pixId = 1;
+    TipoChave tipoChave = 2;
+    string valorChave = 3;
+    TipoConta tipoConta = 4;
+    google.protobuf.Timestamp criadaEm = 5;
+  }
+  string clientId = 1;
+  repeated ChavePix chavesPix = 2;
 }
