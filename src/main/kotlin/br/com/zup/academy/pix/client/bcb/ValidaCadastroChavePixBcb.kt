@@ -15,10 +15,17 @@ class ValidaCadastroChavePixBcb(@Inject val bcbClient: BcbClient) {
         val response: HttpResponse<BcbPixResponse>
         try {
             response = bcbClient.cadastrarChavePixNoBcbClient(BcbPixRequest.fill(chavePix))
-            chavePix.valorChave = response.body()?.key!!
         } catch (ex: HttpClientResponseException) {
-            if (HttpStatus.UNPROCESSABLE_ENTITY.code == ex.status.code) throw ChavePixExistenteException("A chave Pix informada já está cadastrada no sistema!")
-            throw IllegalStateException("Erro ao registrar a chave PIX no Banco Central do Brasil (BCB)")
+            if (HttpStatus.UNPROCESSABLE_ENTITY.code == ex.status.code) {
+                throw ChavePixExistenteException(ex.message.toString())
+            }
+            throw ex
         }
+
+        with(response) {
+            if (status != HttpStatus.CREATED)
+                throw IllegalStateException("Erro ao registrar a chave PIX no Banco Central do Brasil (BCB)")
+        }.apply { chavePix.valorChave = response.body().key }
     }
+
 }

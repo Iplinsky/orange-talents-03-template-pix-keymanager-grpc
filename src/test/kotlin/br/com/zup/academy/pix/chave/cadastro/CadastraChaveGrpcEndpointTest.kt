@@ -2,11 +2,12 @@ package br.com.zup.academy.pix.chave.cadastro
 
 import br.com.zup.academy.KeyManagerCadastrarGrpcServiceGrpc
 import br.com.zup.academy.KeyPixRequestCadastro
+import br.com.zup.academy.TipoChave
+import br.com.zup.academy.TipoConta
 import br.com.zup.academy.pix.chave.*
 import br.com.zup.academy.pix.client.bcb.*
 import br.com.zup.academy.pix.client.itau.*
 import io.grpc.ManagedChannel
-import io.grpc.Status
 import io.grpc.Status.*
 import io.grpc.StatusRuntimeException
 import io.micronaut.context.annotation.Factory
@@ -58,7 +59,7 @@ class CadastraChaveGrpcEndpointTest {
     @Order(1)
     fun `deve cadastrar uma nova chave pix do tipo cpf`() {
         `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-            tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name))
+            tipo = "CONTA_CORRENTE"))
             .thenReturn(HttpResponse.ok(filledPixDtoResponse()))
 
         `when`(bcbClient.cadastrarChavePixNoBcbClient(pixRequestCpf())).thenReturn(HttpResponse.created(pixResponseCpf()))
@@ -67,9 +68,9 @@ class CadastraChaveGrpcEndpointTest {
             KeyPixRequestCadastro
                 .newBuilder()
                 .setClientId(RANDOM_CLIENT_ID_PIX)
-                .setTipoChavePix(KeyPixRequestCadastro.TipoChave.CPF)
+                .setTipoChavePix(TipoChave.CPF)
                 .setValorChave("01234567890")
-                .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE)
+                .setTipoConta(TipoConta.CONTA_CORRENTE)
                 .build()
 
         )
@@ -78,7 +79,7 @@ class CadastraChaveGrpcEndpointTest {
             assertNotNull(pixId)
             assertEquals(RANDOM_CLIENT_ID_PIX, clientId)
             verify(itauClient, atMost(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-                tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name)
+                tipo = TipoConta.CONTA_CORRENTE.name)
             verify(bcbClient, times(1)).cadastrarChavePixNoBcbClient(pixRequestCpf())
         }
     }
@@ -87,7 +88,7 @@ class CadastraChaveGrpcEndpointTest {
     @Order(2)
     fun `deve cadastrar uma nova chave pix do tipo email`() {
         `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-            tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name))
+            tipo = TipoConta.CONTA_CORRENTE.name))
             .thenReturn(HttpResponse.ok(filledPixDtoResponse()))
 
         `when`(bcbClient.cadastrarChavePixNoBcbClient(pixRequestEmail())).thenReturn(HttpResponse.created(
@@ -97,9 +98,9 @@ class CadastraChaveGrpcEndpointTest {
             KeyPixRequestCadastro
                 .newBuilder()
                 .setClientId(RANDOM_CLIENT_ID_PIX)
-                .setTipoChavePix(KeyPixRequestCadastro.TipoChave.EMAIL)
+                .setTipoChavePix(TipoChave.EMAIL)
                 .setValorChave("thiago.iplinsky@zup.com.br")
-                .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE)
+                .setTipoConta(TipoConta.CONTA_CORRENTE)
                 .build()
 
         )
@@ -108,7 +109,7 @@ class CadastraChaveGrpcEndpointTest {
             assertNotNull(pixId)
             assertEquals(RANDOM_CLIENT_ID_PIX, clientId)
             verify(itauClient, atMost(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-                tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name)
+                tipo = TipoConta.CONTA_CORRENTE.name)
             verify(bcbClient, times(1)).cadastrarChavePixNoBcbClient(pixRequestEmail())
         }
     }
@@ -117,7 +118,7 @@ class CadastraChaveGrpcEndpointTest {
     @Order(3)
     fun `deve cadastrar uma nova chave pix do tipo telefone celular`() {
         `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-            tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name))
+            tipo = TipoConta.CONTA_CORRENTE.name))
             .thenReturn(HttpResponse.ok(filledPixDtoResponse()))
 
         `when`(bcbClient.cadastrarChavePixNoBcbClient(pixRequestTelefone())).thenReturn(HttpResponse.created(
@@ -127,9 +128,9 @@ class CadastraChaveGrpcEndpointTest {
             KeyPixRequestCadastro
                 .newBuilder()
                 .setClientId(RANDOM_CLIENT_ID_PIX)
-                .setTipoChavePix(KeyPixRequestCadastro.TipoChave.TELEFONE)
+                .setTipoChavePix(TipoChave.TELEFONE)
                 .setValorChave("+5585988714077")
-                .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE)
+                .setTipoConta(TipoConta.CONTA_CORRENTE)
                 .build()
 
         )
@@ -138,7 +139,7 @@ class CadastraChaveGrpcEndpointTest {
             assertNotNull(pixId)
             assertEquals(RANDOM_CLIENT_ID_PIX, clientId)
             verify(itauClient, atMost(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-                tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name)
+                tipo = TipoConta.CONTA_CORRENTE.name)
             verify(bcbClient, times(1)).cadastrarChavePixNoBcbClient(pixRequestTelefone())
         }
     }
@@ -161,9 +162,9 @@ class CadastraChaveGrpcEndpointTest {
                 KeyPixRequestCadastro
                     .newBuilder()
                     .setClientId(RANDOM_CLIENT_ID_PIX)
-                    .setTipoChavePix(KeyPixRequestCadastro.TipoChave.CPF)
+                    .setTipoChavePix(TipoChave.CPF)
                     .setValorChave("01234567890")
-                    .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE)
+                    .setTipoConta(TipoConta.CONTA_CORRENTE)
                     .build()
             )
         }
@@ -171,7 +172,7 @@ class CadastraChaveGrpcEndpointTest {
             assertEquals(ALREADY_EXISTS.code, status.code)
             assertEquals("A chave '01234567890' já existe.", status.description)
             verify(itauClient, times(0)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-                tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name)
+                tipo = TipoConta.CONTA_CORRENTE.name)
         }
     }
 
@@ -179,7 +180,7 @@ class CadastraChaveGrpcEndpointTest {
     @Order(5)
     fun `nao deve registrar uma chave pix para um usuario nao encontrado`() {
         `when`(itauClient.consultarContaDoClienteItau(RANDOM_CLIENT_ID_PIX,
-            KeyPixRequestCadastro.TipoConta.CONTA_POUPANCA.name))
+            TipoConta.CONTA_POUPANCA.name))
             .thenReturn(HttpResponse.notFound())
 
         val exceptionResponse = assertThrows<StatusRuntimeException> {
@@ -187,9 +188,9 @@ class CadastraChaveGrpcEndpointTest {
                 KeyPixRequestCadastro
                     .newBuilder()
                     .setClientId(RANDOM_CLIENT_ID_PIX)
-                    .setTipoChavePix(KeyPixRequestCadastro.TipoChave.CPF)
+                    .setTipoChavePix(TipoChave.CPF)
                     .setValorChave("98765432100")
-                    .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_POUPANCA)
+                    .setTipoConta(TipoConta.CONTA_POUPANCA)
                     .build()
             )
         }
@@ -197,7 +198,7 @@ class CadastraChaveGrpcEndpointTest {
             assertEquals(NOT_FOUND.code, status.code)
             assertEquals("Cliente não localizado no banco Itau.", status.description)
             verify(itauClient, times(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-                tipo = KeyPixRequestCadastro.TipoConta.CONTA_POUPANCA.name)
+                tipo = TipoConta.CONTA_POUPANCA.name)
         }
     }
 
@@ -210,7 +211,7 @@ class CadastraChaveGrpcEndpointTest {
         with(exceptionResponse) {
             assertEquals(INVALID_ARGUMENT.code, status.code)
             verify(itauClient, never()).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-                tipo = KeyPixRequestCadastro.TipoConta.CONTA_POUPANCA.name)
+                tipo = TipoConta.CONTA_POUPANCA.name)
         }
     }
 
@@ -218,7 +219,7 @@ class CadastraChaveGrpcEndpointTest {
     @Order(7)
     fun `nao deve cadastrar uma chave pix caso ocorra algum erro na comunicacao com o sistema do BCB`() {
         `when`(itauClient.consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX,
-            tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name))
+            tipo = TipoConta.CONTA_CORRENTE.name))
             .thenReturn(HttpResponse.ok(filledPixDtoResponse()))
 
         `when`(bcbClient.cadastrarChavePixNoBcbClient(pixRequestCpf())).thenReturn(HttpResponse.badRequest())
@@ -228,16 +229,16 @@ class CadastraChaveGrpcEndpointTest {
                 KeyPixRequestCadastro
                     .newBuilder()
                     .setClientId(RANDOM_CLIENT_ID_PIX)
-                    .setTipoChavePix(KeyPixRequestCadastro.TipoChave.CPF)
+                    .setTipoChavePix(TipoChave.CPF)
                     .setValorChave("01234567890")
-                    .setTipoConta(KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE)
+                    .setTipoConta(TipoConta.CONTA_CORRENTE)
                     .build()
             )
         }
         with(exceptionResponse) {
             assertEquals("Erro ao registrar a chave PIX no Banco Central do Brasil (BCB)", status.description)
-            assertEquals(Status.FAILED_PRECONDITION.code, status.code)
-            verify(itauClient, times(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE.name)
+            assertEquals(FAILED_PRECONDITION.code, status.code)
+            verify(itauClient, times(1)).consultarContaDoClienteItau(clientId = RANDOM_CLIENT_ID_PIX, tipo = TipoConta.CONTA_CORRENTE.name)
             verify(bcbClient, times(1)).cadastrarChavePixNoBcbClient(pixRequestCpf())
         }
     }
@@ -337,7 +338,7 @@ class CadastraChaveGrpcEndpointTest {
 
     fun pixRequestTelefone(): BcbPixRequest {
         return BcbPixRequest(
-            keyType = PixKeyTypeEnum.PHONE,
+            keyType = PixKeyTypeEnum.TELEFONE,
             key = "+5585988714077",
             bankAccount = BankAccount(
                 participant = ContaUsuarioItau.ITAU_UNIBANCO_ISPB,
@@ -355,7 +356,7 @@ class CadastraChaveGrpcEndpointTest {
 
     fun pixResponseTelefone(): BcbPixResponse {
         return BcbPixResponse(
-            keyType = PixKeyTypeEnum.PHONE,
+            keyType = PixKeyTypeEnum.TELEFONE,
             key = "+5585988714077",
             bankAccount = BankAccount(
                 participant = ContaUsuarioItau.ITAU_UNIBANCO_ISPB,
@@ -374,7 +375,7 @@ class CadastraChaveGrpcEndpointTest {
 
     fun filledPixDtoResponse(): PixDtoResponse {
         return PixDtoResponse(
-            tipo = KeyPixRequestCadastro.TipoConta.CONTA_CORRENTE_VALUE.toString(),
+            tipo = TipoConta.CONTA_CORRENTE_VALUE.toString(),
             instituicao = InstituicaoResponse("UNIBANCO ITAU SA", "ITAU_UNIBANCO_ISPB"),
             agencia = "7777",
             numero = "291900",

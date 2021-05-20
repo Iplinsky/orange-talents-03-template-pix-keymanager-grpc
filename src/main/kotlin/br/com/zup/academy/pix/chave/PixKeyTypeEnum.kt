@@ -4,7 +4,7 @@ enum class PixKeyTypeEnum(val domainType: TipoChaveEnum?) {
 
     CPF(domainType = TipoChaveEnum.CPF),
     CNPJ(domainType = null),
-    PHONE(domainType = TipoChaveEnum.TELEFONE),
+    TELEFONE(domainType = TipoChaveEnum.TELEFONE),
     EMAIL(domainType = TipoChaveEnum.EMAIL),
     RANDOM(domainType = TipoChaveEnum.ALEATORIA);
 

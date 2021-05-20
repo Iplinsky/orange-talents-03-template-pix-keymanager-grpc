@@ -14,7 +14,7 @@ import javax.validation.constraints.Size
 
 @PixKey
 @Introspected
-data class KeyPixCadastro(
+class KeyPixCadastro(
     @ValidUUID
     @field:NotBlank
     val clientId: String,
