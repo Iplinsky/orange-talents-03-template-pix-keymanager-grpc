@@ -13,7 +13,9 @@ import javax.inject.Singleton
 
 @ErrorHandler
 @Singleton
-class CadastraChaveGrpcEndpoint(@Inject private val pixService: CadastraChaveGrpcService) :
+class CadastraChaveGrpcEndpoint(
+    @Inject private val pixService: CadastraChaveGrpcService,
+) :
     KeyManagerCadastrarGrpcServiceGrpc.KeyManagerCadastrarGrpcServiceImplBase() {
 
     private val LOGGER = LoggerFactory.getLogger(this.javaClass)

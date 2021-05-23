@@ -10,7 +10,7 @@ class ValidaComunicacaoErpItau(@Inject val itauClient: ItauClient) {
 
     fun comunicar(pixDtoCadastro: KeyPixCadastro): ContaUsuarioItau {
         val consultarContaDoClienteItau =
-            itauClient.consultarContaDoClienteItau(pixDtoCadastro.clientId!!, pixDtoCadastro.tipoConta!!.name)
+            itauClient.consultarContaDoClienteItau(pixDtoCadastro.clientId, pixDtoCadastro.tipoConta.name)
 
         return consultarContaDoClienteItau?.body()?.toModel()
             ?: throw ClientNotFoundException("Cliente não localizado no banco Itau.")

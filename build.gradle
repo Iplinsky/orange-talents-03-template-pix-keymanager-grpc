@@ -38,11 +38,11 @@ dependencies {
     runtimeOnly("com.h2database:h2")
     implementation("io.micronaut:micronaut-validation")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-    testImplementation("org.mockito:mockito-core")
     testImplementation("io.micronaut:micronaut-http-client")
     implementation("io.micronaut:micronaut-http-client")
     implementation(group: 'org.hibernate', name: 'hibernate-validator', version: '6.1.6.Final')
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.12.+"
+    annotationProcessor("io.micronaut:micronaut-inject-java")
     // Setting up JUnit 5
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
     testImplementation("org.junit.jupiter:junit-jupiter-api")
@@ -59,10 +59,10 @@ dependencies {
 
 }
 
-
 application {
     mainClass.set("br.com.zup.academy.ApplicationKt")
 }
+
 java {
     sourceCompatibility = JavaVersion.toVersion("11")
 }

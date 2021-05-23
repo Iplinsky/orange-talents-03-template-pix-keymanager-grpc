@@ -69,7 +69,7 @@ internal class RemoveChaveGrpcEndpointTest {
     @Order(1)
     fun `deve remover a chave PIX cadastrada no sistema`() {
 
-        `when`(bcbClient.removerChavePixNoBcbClient(chavePix.id.toString(),
+        `when`(bcbClient.removerChavePixNoBcbClient(chavePix.valorChave,
             pixDeleteRequest())).thenReturn(HttpResponse.ok(pixDeleteResponse()))
 
         val response: KeyPixResponseRemove = keyManagerServiceGrpc.removerChavePix(
@@ -81,7 +81,7 @@ internal class RemoveChaveGrpcEndpointTest {
         )
         with(response) {
             assertEquals(response.pixId, chavePix.id.toString())
-            verify(bcbClient, times(1)).removerChavePixNoBcbClient(chavePix.id.toString(), pixDeleteRequest())
+            verify(bcbClient, times(1)).removerChavePixNoBcbClient(chavePix.valorChave, pixDeleteRequest())
         }
     }
 
@@ -134,8 +134,8 @@ internal class RemoveChaveGrpcEndpointTest {
     @Test
     @Order(4)
     fun `nao deve remover a chave PIX caso ocorra algum problema na comunicacao com o sistema do BCB`() {
-        `when`(bcbClient.removerChavePixNoBcbClient(chavePix.id.toString(),
-            pixDeleteRequest())).thenReturn(HttpResponse.badRequest())
+        `when`(bcbClient.removerChavePixNoBcbClient(chavePix.valorChave,
+            pixDeleteRequest())).thenReturn(HttpResponse.notAllowed())
 
         val responseException = assertThrows<StatusRuntimeException> {
             keyManagerServiceGrpc.removerChavePix(
@@ -148,8 +148,9 @@ internal class RemoveChaveGrpcEndpointTest {
         }
         with(responseException) {
             assertEquals(Status.FAILED_PRECONDITION.code, responseException.status.code)
-            assertEquals("Erro ao remover a chave PIX no sistema do Banco Central do Brasil (BCB)", responseException.status.description)
-            verify(bcbClient, atMost(1)).removerChavePixNoBcbClient(chavePix.id.toString(), pixDeleteRequest())
+            assertEquals("Erro ao remover a chave PIX no sistema do Banco Central do Brasil (BCB)",
+                responseException.status.description)
+            verify(bcbClient, atMost(1)).removerChavePixNoBcbClient(chavePix.valorChave, pixDeleteRequest())
         }
     }
 
@@ -164,7 +165,7 @@ internal class RemoveChaveGrpcEndpointTest {
     }
 
     fun pixDeleteRequest(): BcbPixDeleteRequest {
-        return BcbPixDeleteRequest(chavePix.id.toString(), ContaUsuarioItau.ITAU_UNIBANCO_ISPB)
+        return BcbPixDeleteRequest(chavePix.valorChave, ContaUsuarioItau.ITAU_UNIBANCO_ISPB)
     }
 
     fun pixDeleteResponse(): BcbPixDeleteResponse {
