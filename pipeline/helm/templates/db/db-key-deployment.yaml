@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-key-deployment
+spec:
+  selector:
+    matchLabels:
+      app: db-key
+  template:
+    metadata:
+      name: db-key-deployment
+      labels:
+        app: db-key
+    spec:
+      containers:
+        - name: db-key-container
+          image: postgres:alpine
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: db-key-configmap
+#            - secretRef:
+#                name: db-key-secret
+
+#          - env:
+#              - name: POSTGRES_USER
+#                valueFrom:
+#                  secretKeyRef:
+#                    name: db-key-secret
+#                    key: POSTGRES_USER
+#              - name: POSTGRES_PASSWORD
+#                valueFrom:
+#                  secretKeyRef:
+#                    name: db-key-secret
+#                    key: POSTGRES_PASSWORD
+#              - name: POSTGRES_DB
+#                  valueFrom:
+#                    secretKeyRef:
+#                      name: db-key-secret
+#                      key: POSTGRES_DB
+#              - name: POSTGRES_HOST
+#                  valueFrom:
+#                    secretKeyRef:
+#                      name: db-key-secret
+#                      key: POSTGRES_HOST
+

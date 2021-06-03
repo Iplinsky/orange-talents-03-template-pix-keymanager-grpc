@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bcb-client-deployment
+spec:
+  selector:
+    matchLabels:
+      app: bcb-client
+  template:
+    metadata:
+      name: bcb-client-deployment
+      labels:
+        app: bcb-client
+        client: client
+    spec:
+      containers:
+        - name: bcb-client-container
+          image: "public.ecr.aws/d8b2x5c9/orange-stack-sat-bcb-pix"
+          ports:
+            - name: bcb-port
+              containerPort: 8082
+              protocol: TCP

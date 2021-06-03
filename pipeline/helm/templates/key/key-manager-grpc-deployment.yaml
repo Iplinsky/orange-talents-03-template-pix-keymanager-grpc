@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: key-manager-grpc-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: key-manager-grpc
+  template:
+    metadata:
+      name: key-manager-grpc
+      labels:
+        app: key-manager-grpc
+    spec:
+      containers:
+        - name: key-manager-grpc-container
+          image: iplinsky/keymanager
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 50051
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+            initialDelaySeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+            failureThreshold: 5
+            initialDelaySeconds: 3
+          envFrom:
+            - configMapRef:
+                name: key-manager-grpc-configmap
+            - secretRef:
+                name: key-manager-grpc-secret

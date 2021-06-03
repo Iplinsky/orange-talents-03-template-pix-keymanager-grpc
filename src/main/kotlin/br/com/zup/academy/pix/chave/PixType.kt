@@ -17,8 +17,8 @@ sealed class PixType {
 
     @Introspected
     data class PixIdModel(
-        @field:NotBlank @field:ValidUUID val clientId: String,
-        @field:NotBlank @field:ValidUUID val pixId: String,
+        @field:[NotBlank ValidUUID] val clientId: String,
+        @field:[NotBlank ValidUUID] val pixId: String,
     ) : PixType() {
 
         override fun retrieve(chavePixRepository: ChavePixRepository, bcbClient: BcbClient): KeyPixRetornoConsulta {
